@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "La première demi-heure prédit-elle encore la dernière ? Le momentum intrajournalier de marché rejoué sur huit fonds indiciels, 2016-2026"
+message: "Si vous utilisez ce dépôt, citez-le comme suit."
+type: software
+authors:
+  - family-names: Vaudescal
+    given-names: Guillaume
+repository-code: "https://github.com/Guilou001/22-derniere-demi-heure"
+license: MIT
+version: 1.0.0
+date-released: "2026-08-31"
+references:
+  - type: article
+    title: "Market intraday momentum"
+    authors:
+      - family-names: Gao
+        given-names: Lei
+      - family-names: Han
+        given-names: Yufeng
+      - family-names: Li
+        given-names: Sophia Zhengzi
+      - family-names: Zhou
+        given-names: Guofu
+    journal: "Journal of Financial Economics"
+    volume: 129
+    issue: 2
+    year: 2018
+    start: 394
+    end: 414

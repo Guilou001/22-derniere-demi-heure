@@ -1,0 +1,19 @@
+{
+  "fonds": 8,
+  "pente_positive_r1": 2,
+  "pente_negative_r1": 6,
+  "significatifs_positifs_r1": 1,
+  "significatifs_negatifs_r1": 1,
+  "pente_mediane_r1": -0.01831664501539745,
+  "pente_positive_r12": 8,
+  "significatifs_positifs_r12": 2,
+  "pente_mediane_r12": 0.10381539980415692,
+  "echantillon_publie": [
+    1993,
+    2013
+  ],
+  "fenetre_du_depot": [
+    2016,
+    2026
+  ]
+}
