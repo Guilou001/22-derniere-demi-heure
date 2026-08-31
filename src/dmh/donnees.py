@@ -1,19 +1,24 @@
-"""Les barres d'une minute de deux fonds indiciels, téléchargées une fois.
+"""Les barres d'une minute de huit fonds indiciels, téléchargées une fois.
 
 Le téléchargement et le cache vivent dans `gvf.marches`, à un seul endroit pour le portefeuille. Ce
 module ne dit que le choix des symboles, de la fenêtre et du flux.
 
-**Le flux consolidé, et pas celui d'IEX.** Mesuré le 30 août 2026 : le flux IEX ne capte que 1,81 %
-du volume consolidé et n'a vu aucune transaction sur 57 % des minutes. Un prix de fin de demi-heure
-tiré d'IEX serait donc souvent le prix d'une minute antérieure, ce qui décalerait le signal étudié.
-Le consolidé remonte à janvier 2016, ce qui fixe le début de la fenêtre.
+**Le flux consolidé, et pas celui d'IEX.** Le dépôt voisin 24 mesure sur QQQ, du 3 août 2020 au
+28 août 2026, qu'IEX porte 1,37 % du volume consolidé et publie une barre dans 91,9 % des minutes de
+séance. Les trous ne sont donc pas ce qui gêne : c'est le prix qui diffère, la moyenne pondérée d'IEX
+s'écartant de 9,61 cents en médiane. Une mesure antérieure de ce portefeuille annonçait 57 % de
+minutes muettes ; ce compte porte sur la journée entière, extensions d'avant et d'après-bourse
+comprises, et non sur les 390 minutes de séance où ce dépôt travaille. Le consolidé remonte à
+janvier 2016, ce qui fixe le début de la fenêtre.
 
-**Des prix bruts, pas ajustés.** Le dividende n'a pas d'effet à l'intérieur d'une séance, et les
-deux fournisseurs n'entendent pas la même chose par « ajusté » : les mêler poserait une marche de
-onze points de base à chaque détachement trimestriel. Le rendement de la première demi-heure se
-mesurant depuis la clôture de la veille, il traverse un détachement quatre fois l'an, et le dépôt
-retire donc ces quatre séances par an plutôt que d'y laisser un saut de prix qui n'est pas un
-rendement.
+**Des prix bruts, pas ajustés.** Les deux fournisseurs n'entendent pas la même chose par « ajusté » :
+les mêler poserait une marche de onze points de base à chaque détachement trimestriel. Le rendement
+de la première demi-heure se mesurant depuis la clôture de la veille, il traverse un détachement
+quatre fois l'an. Ces séances ne sont PAS retirées, et aucun filtre de ce genre n'existe dans le
+dépôt. Mesuré sur le S&P 500, sur les 41 troisièmes vendredis de trimestre de la fenêtre : le
+rendement de la première demi-heure y vaut -55,16 points de base en moyenne contre +4,70 ailleurs. Il
+y est négatif 92,7 % du temps contre 43,6 %. Retirer ces 41 séances déplace la pente de -0,055651
+(t -2,10) à -0,056856 (t -2,18). Déclaré, non corrigé.
 """
 
 from __future__ import annotations

@@ -63,14 +63,19 @@ def verdict() -> None:
 
 @app.command()
 def robustesse() -> None:
-    """Les sous-périodes, le conditionnement, et ce qui dans la nuit porte le signal."""
+    """Les sous-périodes, le conditionnement, et ce qui, dans la première demi-heure, porte le
+    signal."""
     tables = _tables()
     actions = {k: tables[k] for k in ("SPY", "QQQ", "IWM", "DIA")}
     periodes = etudes.par_periode(actions, "r1")
     typer.echo(periodes[["symbole", "periode", "pente", "student", "observations"]]
                .to_string(index=False))
     _ecrire(periodes, "par_periode")
-    _ecrire(etudes.conditionnement(actions, "r1"), "conditionnement")
+    tiers = etudes.conditionnement(actions, "r1")
+    _ecrire(tiers, "conditionnement")
+    ecarts = etudes.ecart_entre_tiers(tiers)
+    typer.echo(ecarts.to_string(index=False))
+    _ecrire(ecarts, "ecart_entre_tiers")
     import pandas as pd
 
     nuit = pd.concat([etudes.decomposition_de_la_nuit(s)

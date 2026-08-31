@@ -4,7 +4,7 @@ UV ?= uv
 setup:
 	$(UV) sync --locked --all-extras
 
-test:             ## 21 tests fermés, sans réseau ni données de marché
+test:             ## 31 tests fermés, sans réseau ni données de marché
 	$(UV) run pytest
 
 lint:

@@ -103,3 +103,53 @@ def test_le_dernier_rendement_est_bien_la_derniere_demi_heure():
 def test_le_volume_de_la_premiere_demi_heure_est_bien_celui_de_trente_barres():
     table = demiheures.rendements(deux_seances())
     assert float(table["volume_premiere"].iloc[0]) == pytest.approx(30 * 1000.0)
+
+
+def test_l_identite_de_composition_ne_controle_rien_d_autre_que_l_arrondi():
+    """Elle est algébrique : le produit télescope, et ses deux membres sont bâtis du même dernier
+    prix et de la même veille. Des prix entièrement mélangés la vérifient encore, donc elle ne dit
+    rien d'un décalage de barre. Ce test fige cette limite pour qu'on cesse de la lire autrement."""
+    brutes = deux_seances(pente=0.01)
+    melangees = brutes.copy()
+    tire = np.random.default_rng(0).permutation(len(brutes))
+    for colonne in ("ouverture", "haut", "bas", "cloture"):
+        melangees[colonne] = brutes[colonne].to_numpy()[tire]
+    table = demiheures.rendements(melangees)
+    assert abs(float(demiheures.ecart_a_l_identite(table).iloc[0])) < 1e-12
+
+
+def test_le_prix_de_bord_ne_depend_pas_de_l_ordre_des_lignes():
+    """Le prix de fin doit être celui de la dernière MINUTE, pas de la dernière LIGNE reçue. C'est
+    exactement le défaut qu'un horodatage mal lu produit : bon nombre de lignes, bonnes colonnes,
+    prix appariés aux mauvaises minutes."""
+    brutes = deux_seances(pente=0.01)
+    melangees = brutes.sample(frac=1.0, random_state=1).reset_index(drop=True)
+    attendu = demiheures.prix_de_bord(brutes)
+    obtenu = demiheures.prix_de_bord(melangees)
+    pd.testing.assert_frame_equal(attendu, obtenu)
+
+
+def test_le_controle_des_barres_compte_les_minutes_de_chaque_demi_heure():
+    controle = demiheures.controle_des_barres(deux_seances())
+    assert controle["demi_heures"] == 2 * demiheures.DEMI_HEURES
+    assert controle["demi_heures_incompletes"] == 0
+    assert controle["barres_manquantes"] == 0
+    assert controle["bords_deplaces_par_le_melange"] == 0
+
+
+def test_le_controle_des_barres_voit_une_demi_heure_amputee():
+    """Une séance à 390 barres passe le filtre de complétude, et pourtant une de ses demi-heures a
+    perdu une minute. C'est le contrôle que l'identité de composition ne fait pas."""
+    pleine = seance("2026-06-15", [100.0] * 391)
+    trouee = seance("2026-06-16", [100.0] * 391)
+    trouee = trouee.drop(index=45).reset_index(drop=True)      # la minute de 10 h 15
+    controle = demiheures.controle_des_barres(pd.concat([pleine, trouee], ignore_index=True))
+    assert controle["demi_heures"] == 2 * demiheures.DEMI_HEURES
+    assert controle["demi_heures_incompletes"] == 1
+    assert controle["barres_manquantes"] == 1
+
+
+def test_les_barres_attendues_valent_trente_sauf_pour_la_treizieme():
+    rangs = np.arange(demiheures.DEMI_HEURES)
+    attendu = demiheures.barres_attendues(rangs)
+    assert list(attendu) == [30] * 12 + [31]

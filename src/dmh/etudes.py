@@ -1,4 +1,4 @@
-"""Les cinq études du dépôt, chacune rendant le tableau qu'elle produit."""
+"""Les études du dépôt, chacune rendant le tableau qu'elle produit."""
 
 from __future__ import annotations
 
@@ -18,19 +18,21 @@ def preparer(symbole: str, cache=donnees.CACHE) -> pd.DataFrame:
     return table
 
 
-def controle_du_decoupage(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
-    """L'identité que les treize demi-heures doivent vérifier, symbole par symbole.
+def controle_du_decoupage(tables: dict[str, pd.DataFrame], cache=donnees.CACHE) -> pd.DataFrame:
+    """Les trois contrôles du découpage, symbole par symbole.
 
-    Elles doivent se composer exactement en le rendement de clôture à clôture. C'est le contrôle qui
-    garantit qu'aucune demi-heure n'est décalée d'une barre, ce qu'aucun test de forme ne verrait :
-    la table aurait le bon nombre de lignes et les bonnes colonnes.
+    Le premier est l'identité de composition, qui ne mesure que l'arrondi de la machine et ne peut
+    pas échouer. Les deux autres le peuvent : le compte des barres de chaque demi-heure, et la
+    coïncidence des prix de bord avec ceux d'une copie des barres remise en désordre.
     """
     lignes = []
     for symbole, table in tables.items():
         ecart = demiheures.ecart_a_l_identite(table).abs()
+        barres = demiheures.controle_des_barres(donnees.telecharger(symbole, cache))
         lignes.append({"symbole": symbole, "seances": int(len(table)),
                        "premiere": str(table.index.min()), "derniere": str(table.index.max()),
-                       "pire_ecart": float(ecart.max()), "ecart_median": float(ecart.median())})
+                       "pire_ecart": float(ecart.max()), "ecart_median": float(ecart.median()),
+                       **barres})
     return pd.DataFrame(lignes)
 
 
@@ -76,14 +78,35 @@ def conditionnement(tables: dict[str, pd.DataFrame], signal: str = "r1") -> pd.D
     return pd.concat(lignes, ignore_index=True)
 
 
-def decomposition_de_la_nuit(symbole: str, cache=donnees.CACHE) -> pd.DataFrame:
-    """Ce qui, dans la première demi-heure, porte le signal : la nuit ou la séance.
+def ecart_entre_tiers(table: pd.DataFrame) -> pd.DataFrame:
+    """La différence entre le tiers haut et le tiers bas, avec son erreur type.
 
-    L'article mesure sa première demi-heure depuis la clôture de la veille, donc elle contient deux
-    choses : l'écart d'ouverture et la première demi-heure de bourse. Les séparer dit laquelle
-    prédit, et la réponse n'est pas celle qu'on attendrait d'un effet dit « intrajournalier ».
+    Comparer deux pentes à l'œil ne dit pas si elles diffèrent. Les trois tiers étant disjoints,
+    leurs pentes sont estimées sur des séances distinctes, et l'erreur type de leur différence est la
+    racine de la somme des carrés des deux erreurs types.
     """
-    barres = donnees.telecharger(symbole, cache)
+    lignes = []
+    for (symbole, colonne), sous in table.groupby(["symbole", "conditionnement"], sort=False):
+        indexe = sous.set_index("tiers")
+        if not {"bas", "haut"} <= set(indexe.index):
+            continue
+        haut, bas = indexe.loc["haut"], indexe.loc["bas"]
+        difference = float(haut["pente"]) - float(bas["pente"])
+        erreur = float(np.hypot(haut["erreur_pente"], bas["erreur_pente"]))
+        lignes.append({"symbole": symbole, "conditionnement": colonne,
+                       "pente_bas": float(bas["pente"]), "pente_haut": float(haut["pente"]),
+                       "haut_moins_bas": difference, "erreur_de_l_ecart": erreur,
+                       "student": difference / erreur if erreur > 0 else float("nan")})
+    return pd.DataFrame(lignes)
+
+
+def trois_definitions(barres: pd.DataFrame) -> pd.DataFrame:
+    """Les trois versions du signal, séance par séance, avant toute régression.
+
+    La première demi-heure de l'article vaut le prix de 10 h sur la clôture de la veille. La nuit
+    seule s'arrête au prix d'ouverture de 9 h 30, la séance seule part de ce même prix d'ouverture
+    pour aller au prix de 10 h. Le produit des deux dernières redonne la première, à un près.
+    """
     bords = demiheures.prix_de_bord(barres)
     large = bords.pivot(index="seance", columns="rang", values="prix").dropna().sort_index()
 
@@ -100,8 +123,22 @@ def decomposition_de_la_nuit(symbole: str, cache=donnees.CACHE) -> pd.DataFrame:
         "la nuit seule": ouverture / veille - 1,
         "la séance seule": large[0] / ouverture - 1,
     }).dropna()
+    return cadre
+
+
+DEFINITIONS = ("depuis la veille", "la nuit seule", "la séance seule")
+
+
+def decomposition_de_la_nuit(symbole: str, cache=donnees.CACHE) -> pd.DataFrame:
+    """Ce qui, dans la première demi-heure, porte le signal : la nuit ou la séance.
+
+    L'article mesure sa première demi-heure depuis la clôture de la veille, donc elle contient deux
+    choses : l'écart d'ouverture et la première demi-heure de bourse. Les séparer dit laquelle
+    prédit, et la réponse n'est pas celle qu'on attendrait d'un effet dit « intrajournalier ».
+    """
+    cadre = trois_definitions(donnees.telecharger(symbole, cache))
     lignes = []
-    for colonne in ("depuis la veille", "la nuit seule", "la séance seule"):
+    for colonne in DEFINITIONS:
         r = momentum.regresser(cadre["r13"], cadre[colonne])
         lignes.append({"symbole": symbole, "definition": colonne, **r.en_ligne()})
     return pd.DataFrame(lignes)
@@ -144,8 +181,8 @@ def verdict(predictions: pd.DataFrame) -> dict:
 def profil_des_demi_heures(tables: dict[str, pd.DataFrame]) -> pd.DataFrame:
     """Le rendement moyen et la volatilité de chacune des treize demi-heures.
 
-    C'est le portrait de la séance : la première et la dernière demi-heure concentrent l'essentiel du
-    mouvement, ce qui explique pourquoi la littérature s'y intéresse.
+    C'est le portrait de la séance : la première demi-heure porte le plus grand rendement moyen et
+    la plus forte volatilité des treize, ce qui explique pourquoi la littérature s'y intéresse.
     """
     lignes = []
     for symbole, table in tables.items():

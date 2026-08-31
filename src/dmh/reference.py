@@ -14,8 +14,8 @@ EconPapers du RePEc :
 > exists for ten other most actively traded domestic and international ETFs.
 
 **Ce qui n'a pas été obtenu, et c'est un résultat.** Les tables chiffrées de l'article n'ont pas pu
-être lues. Trois chemins ont été essayés le 30 août 2026 : l'éditeur oppose une vérification
-anti-robot, le dépôt SSRN refuse le téléchargement direct, et l'adresse que le registre du
+être lues. Trois chemins ont été essayés le 30 août 2026. L'éditeur oppose une vérification
+anti-robot, et le dépôt SSRN refuse le téléchargement direct. L'adresse que le registre du
 portefeuille tenait pour un PDF universitaire rend en réalité une page HTML de 138 370 octets. Les
 coefficients, les statistiques de Student et les ratios de Sharpe publiés ne sont donc **pas**
 reproduits ici, et rien dans ce dépôt ne prétend le contraire.

@@ -10,8 +10,8 @@ lorsque le marché monte le matin, il tend à monter encore en fin de séance.
 **Pourquoi Newey et West.** Les erreurs types ordinaires supposent que les résidus sont indépendants
 et de variance constante. Sur des rendements intrajournaliers, la variance change beaucoup d'un jour
 à l'autre, et les jours agités arrivent en grappes. La correction de Newey et West laisse la
-variance varier et laisse les résidus se corréler sur quelques jours, ce qui gonfle honnêtement
-l'erreur type au lieu de trouver de la significativité là où il n'y a que de la persistance.
+variance varier et laisse les résidus se corréler sur quelques jours. Elle gonfle donc honnêtement
+l'erreur type, au lieu de trouver de la significativité là où il n'y a que de la persistance.
 
 **La stratégie, en mots simples.** À 10 h, on regarde si le marché a monté depuis la veille au soir.
 Si oui, on achète pour la dernière demi-heure ; sinon, on vend à découvert. On sort à la clôture. Le
@@ -75,8 +75,10 @@ def _newey_west(X: np.ndarray, residus: np.ndarray, retards: int) -> np.ndarray:
 def regresser(y: pd.Series, x: pd.Series, retards: int | None = None) -> Regression:
     """La régression de y sur x, avec une constante et des erreurs types de Newey et West.
 
-    Le nombre de retards suit la règle usuelle de quatre fois la racine quatrième du nombre
-    d'observations, arrondie vers le bas, si l'appelant n'en impose pas.
+    Le nombre de retards suit, si l'appelant n'en impose pas, la règle 4 (n/100)^(1/4) arrondie vers
+    le bas, celle qu'on trouve dans les manuels d'économétrie. Elle donne 9 retards à 2 649 séances
+    et 8 à 1 864. La règle de Newey et West 1994, 4 (n/100)^(2/9), en donnerait 8 et 7 : les deux
+    existent dans la littérature, et c'est la première qui est retenue ici.
     """
     donnees = pd.concat([y.rename("y"), x.rename("x")], axis=1).dropna()
     n = len(donnees)
@@ -99,7 +101,7 @@ def regresser(y: pd.Series, x: pd.Series, retards: int | None = None) -> Regress
 
 
 def position(signal: pd.Series) -> pd.Series:
-    """La position prise pour la dernière demi-heure : un si le signal monte, moins un sinon.
+    """La position prise pour la dernière demi-heure : un si le signal monte, moins un s'il baisse.
 
     Un signal exactement nul, cas rare mais réel sur des prix arrondis au cent, donne une position
     nulle plutôt qu'un pari arbitraire.
@@ -120,7 +122,7 @@ def rendements_de_la_strategie(table: pd.DataFrame, signal: str = "r1",
 
 
 def mesures(rendements: pd.Series) -> dict:
-    """Les cinq nombres qui décrivent une série de rendements quotidiens."""
+    """Les sept nombres qui décrivent une série de rendements quotidiens."""
     r = rendements.dropna()
     if r.empty:
         raise ValueError("aucun rendement à mesurer")
@@ -175,6 +177,11 @@ def par_tercile(table: pd.DataFrame, colonne: str, signal: str = "r1",
     L'article affirme que l'effet est plus fort les jours volatils et les jours de fort volume. Le
     découpage en tiers d'effectif égal est le test le plus simple de cette affirmation, et il ne
     suppose aucune forme fonctionnelle.
+
+    Les deux bornes de tiers sont calculées sur l'échantillon entier. Les pentes rendues sont donc
+    descriptives et non exécutables : un opérateur de 2016 ne connaissait pas la distribution de
+    2026. Les colonnes de stratégie de ce tableau portent la même fuite, et le README ne publie que
+    les pentes.
     """
     valeurs = table[colonne]
     bornes = valeurs.quantile([1 / 3, 2 / 3]).to_numpy()

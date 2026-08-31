@@ -23,7 +23,10 @@ def _fin(fig, nom: str, dossier: Path = DOSSIER) -> list[Path]:
 def huit_fonds(table, dossier: Path = DOSSIER) -> list[Path]:
     """La pente de chaque fonds, pour les deux signaux, avec deux erreurs types."""
     appliquer()
-    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.8), sharey=True)
+    # Pas de `sharey` : chaque cadre trie ses fonds par sa propre pente, donc les deux n'ont pas le
+    # même ordre. Un axe partagé ne retient que le DERNIER `set_yticks`, et le cadre de gauche
+    # portait alors les étiquettes du cadre de droite, sept fonds sur huit mal nommés.
+    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.8))
     for i, (signal, titre) in enumerate((
             ("r1", "La première demi-heure prédit-elle la dernière ?"),
             ("r12", "Et l'avant-dernière ?"))):
