@@ -31,13 +31,14 @@ give 3.5.*
 
 ## 1. L'affirmation, et le détail qui décide de tout
 
-**Ce que l'article affirme.** Son résumé, relevé le 30 août 2026 sur la notice EconPapers :
+**Ce que l'article affirme.** Un extrait de son résumé, relevé le 30 août 2026 sur la notice
+EconPapers :
 
-> the first half-hour return on the market as measured from the previous day's market close predicts
-> the last half-hour return. This predictability, which is both statistically and economically
-> significant, is stronger on more volatile days, on higher volume days, on recession days, and on
-> major macroeconomic news release days. Intraday momentum also exists for ten other most actively
-> traded domestic and international ETFs.
+> […] the first half-hour return on the market as measured from the previous day's market close
+> predicts the last half-hour return. This predictability, which is both statistically and
+> economically significant, is stronger on more volatile days, on higher volume days, on recession
+> days, and on major macroeconomic news release days. Intraday momentum also exists for ten other
+> most actively traded domestic and international ETFs.
 
 **En mots simples.** La séance américaine dure de 9 h 30 à 16 h, soit treize demi-heures.
 L'affirmation est que si le marché monte le matin, il tend à monter encore juste avant la clôture.
@@ -345,7 +346,7 @@ et le compte de barres.
 | Les chiffres publiés par l'article n'ont pas été obtenus | mesuré ; trois chemins essayés, tous fermés, et ce dépôt teste donc les affirmations du résumé et non les coefficients |
 | Huit fonds et deux signaux font seize tests | déclaré ; trois coefficients y sont significativement positifs, celui de l'or sur le signal de l'article et ceux du S&P 500 et du Nasdaq 100 sur l'avant-dernière demi-heure, et c'est l'ordre de grandeur que le hasard donne à ce compte |
 | Le Dow Jones perd 30,4 % de ses séances au filtre de complétude | mesuré ; 814 séances sur 2 679, c'est le moins échangé des huit, et ses résultats sont donnés mais pas mis en avant |
-| La clôture « de la veille » est celle de la séance retenue précédente | mesuré ; 144 des 1 864 lignes du Dow Jones ont une veille à plus de quatre jours, 39 à plus de sept, la pire à cinquante. En n'exigeant que la vraie veille de bourse, sa pente passe de −0,040 (t = −1,39, n = 1 864) à −0,045 (t = −1,35, n = 1 720). Sur le S&P 500 les 15 lignes concernées sont toutes des fins de semaine longues |
+| La clôture « de la veille » est celle de la séance retenue précédente | mesuré ; 363 des 1 864 lignes du Dow Jones ont une veille qui n'est pas la séance de bourse précédente, dont 144 à plus de quatre jours calendaires, 39 à plus de sept, la pire à cinquante. Le S&P 500 en compte 29, dont 15 à cinq jours calendaires. En exigeant la séance de bourse précédente, la pente du Dow Jones passe de −0,040 (t = −1,39, n = 1 864) à −0,008 (t = −0,33, n = 1 500), et celle du S&P 500 de −0,056 (t = −2,10, n = 2 649) à −0,028 (t = −1,87, n = 2 619). Le chiffre de tête y est sensible : aucun coefficient négatif ne dépasse plus deux erreurs types, cinq pentes sur huit restent négatives au lieu de six, la médiane passe de −0,018 à −0,005, et celle des marchés développés hors Amérique passe à +0,002 |
 | Le détachement de dividende n'est pas retiré | mesuré ; le rendement de la première demi-heure traverse la nuit, donc la chute de détachement, quatre fois l'an. Sur le S&P 500 il vaut −55,16 points de base ces 41 séances-là contre +4,70 ailleurs, et les retirer déplace la pente de −0,0557 à −0,0569 |
 | Le seuil de complétude est de 390 barres et non de 391 | mesuré ; 1 231 demi-heures sur 259 480 ont perdu une minute en cours de séance et leur prix de fin est celui d'une minute antérieure. La barre de 16 h, elle, est présente sur toutes les séances retenues des huit fonds |
 | Les deux critères de tiers de la section 5.4 portent sur la première demi-heure, non sur la journée | déclaré ; le résumé de l'article dit « jours », et le critère de volatilité est la valeur absolue du régresseur lui-même, ce qui restreint l'étendue de ce régresseur à l'intérieur de chaque tiers |

@@ -109,10 +109,14 @@ def rendements(barres: pd.DataFrame, fuseau: str = "America/New_York") -> pd.Dat
 
     « La veille » est ici la séance RETENUE précédente, et non le jour de bourse précédent. Dès
     qu'une séance est écartée au filtre de complétude, le premier rendement de la suivante couvre
-    plusieurs jours. Mesuré sur le Dow Jones, le plus lacunaire des huit : 144 de ses 1 864 lignes
-    ont une veille à plus de quatre jours calendaires, 39 à plus de sept, la pire à cinquante. En
-    n'exigeant que la vraie veille de bourse, sa pente passe de -0,040393 (t -1,39, n 1 864) à
-    -0,044600 (t -1,35, n 1 720). Déclaré, non corrigé.
+    plusieurs jours. Mesuré sur le Dow Jones, le plus lacunaire des huit : 363 de ses 1 864 lignes
+    ont une veille qui n'est pas la séance de bourse précédente, dont 144 à plus de quatre jours
+    calendaires, 39 à plus de sept, la pire à cinquante. Un écart calendaire de quatre jours ou
+    moins ne suffit donc pas à qualifier la veille : une séance écartée en milieu de semaine en
+    laisse deux. En exigeant le rang de bourse précédent, la pente du Dow Jones passe de -0,040393
+    (t -1,39, n 1 864) à -0,007660 (t -0,33, n 1 500). Sur le S&P 500, 29 lignes sont concernées et
+    la pente passe de -0,055651 (t -2,10, n 2 649) à -0,028432 (t -1,87, n 2 619). Déclaré, non
+    corrigé.
     """
     bords = prix_de_bord(barres, fuseau)
     large = bords.pivot(index="seance", columns="rang", values="prix").sort_index()

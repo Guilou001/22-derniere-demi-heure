@@ -47,9 +47,9 @@ _Summary in English. Gao, Han, Li and Zhou (JFE 2018) document market intraday m
 
 == 1. L'affirmation, et le détail qui décide de tout
 
-*Ce que l'article affirme.* Son résumé, relevé le 30 août 2026 sur la notice EconPapers :
+*Ce que l'article affirme.* Un extrait de son résumé, relevé le 30 août 2026 sur la notice EconPapers :
 
-#quote(block: true)[the first half-hour return on the market as measured from the previous day's market close predicts the last half-hour return. This predictability, which is both statistically and economically significant, is stronger on more volatile days, on higher volume days, on recession days, and on major macroeconomic news release days. Intraday momentum also exists for ten other most actively traded domestic and international ETFs.]
+#quote(block: true)[\[…\] the first half-hour return on the market as measured from the previous day's market close predicts the last half-hour return. This predictability, which is both statistically and economically significant, is stronger on more volatile days, on higher volume days, on recession days, and on major macroeconomic news release days. Intraday momentum also exists for ten other most actively traded domestic and international ETFs.]
 
 *En mots simples.* La séance américaine dure de 9 h 30 à 16 h, soit treize demi-heures. L'affirmation est que si le marché monte le matin, il tend à monter encore juste avant la clôture. Assez pour qu'on puisse en vivre, dit l'article.
 
@@ -459,7 +459,7 @@ Le téléchargement demande une clé Alpaca, à poser dans l'environnement ou da
     [Le Dow Jones perd 30,4 % de ses séances au filtre de complétude],
     [mesuré ; 814 séances sur 2 679, c'est le moins échangé des huit, et ses résultats sont donnés mais pas mis en avant],
     [La clôture « de la veille » est celle de la séance retenue précédente],
-    [mesuré ; 144 des 1 864 lignes du Dow Jones ont une veille à plus de quatre jours, 39 à plus de sept, la pire à cinquante. En n'exigeant que la vraie veille de bourse, sa pente passe de −0,040 (t = −1,39, n = 1 864) à −0,045 (t = −1,35, n = 1 720). Sur le S&P 500 les 15 lignes concernées sont toutes des fins de semaine longues],
+    [mesuré ; 363 des 1 864 lignes du Dow Jones ont une veille qui n'est pas la séance de bourse précédente, dont 144 à plus de quatre jours calendaires, 39 à plus de sept, la pire à cinquante. Le S&P 500 en compte 29, dont 15 à cinq jours calendaires. En exigeant la séance de bourse précédente, la pente du Dow Jones passe de −0,040 (t = −1,39, n = 1 864) à −0,008 (t = −0,33, n = 1 500), et celle du S&P 500 de −0,056 (t = −2,10, n = 2 649) à −0,028 (t = −1,87, n = 2 619). Le chiffre de tête y est sensible : aucun coefficient négatif ne dépasse plus deux erreurs types, cinq pentes sur huit restent négatives au lieu de six, la médiane passe de −0,018 à −0,005, et celle des marchés développés hors Amérique passe à +0,002],
     [Le détachement de dividende n'est pas retiré],
     [mesuré ; le rendement de la première demi-heure traverse la nuit, donc la chute de détachement, quatre fois l'an. Sur le S&P 500 il vaut −55,16 points de base ces 41 séances-là contre +4,70 ailleurs, et les retirer déplace la pente de −0,0557 à −0,0569],
     [Le seuil de complétude est de 390 barres et non de 391],
