@@ -18,7 +18,7 @@ Si oui, on achète pour la dernière demi-heure ; sinon, on vend à découvert. 
 rendement de la journée est donc le signe de la première demi-heure multiplié par la dernière.
 
 **Ce qui la tue ou la sauve.** Une position par jour, ouverte et fermée : deux passages de marché par
-jour, soit environ cinq cents aller-retours par an. Un coût d'un point de base par passage retire
+jour, soit environ deux cent cinquante aller-retours par an. Un coût d'un point de base par passage retire
 donc deux points de base par jour à un rendement moyen qui se compte lui aussi en points de base.
 C'est pourquoi le seuil de rentabilité, exprimé en coût par passage, est le vrai chiffre du dépôt.
 """

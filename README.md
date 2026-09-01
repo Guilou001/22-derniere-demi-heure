@@ -3,8 +3,8 @@
 Un article du Journal of Financial Economics montre qu'entre 1993 et 2013, la première demi-heure,
 mesurée depuis la clôture de la veille, prédisait la dernière. Rejoué sur 2016-2026 et sur huit
 fonds indiciels, **le signe s'inverse sur six d'entre eux**. Le renversement penche du côté que
-l'article disait le plus favorable, les jours volatils et les jours de fort volume, sans qu'aucun
-écart entre tiers soit établi.
+l'article disait le plus favorable, les jours volatils et les jours de fort volume. Un seul des huit
+écarts entre tiers dépasse deux erreurs types, là où le hasard en donnerait 0,4.
 
 [![ci](https://github.com/Guilou001/22-derniere-demi-heure/actions/workflows/ci.yml/badge.svg)](https://github.com/Guilou001/22-derniere-demi-heure/actions/workflows/ci.yml)
 ![python](https://img.shields.io/badge/python-3.12-blue)
@@ -206,10 +206,12 @@ lieu de s'y ajouter, et aucune barre ne porte son erreur type.
 ### 5.4 Le renversement penche du côté annoncé, mais aucun écart entre tiers n'est établi
 
 L'article annonce que sa prédictibilité est « plus forte les jours plus volatils, les jours de plus
-fort volume ». Chaque fonds est donc découpé en tiers d'effectif égal, sur les deux critères, et la
-dernière colonne éprouve l'écart lui-même :
+fort volume ». Les deux critères se mesurent ici sur la première demi-heure, non sur la journée. La
+volatilité est la valeur absolue de son rendement, nuit comprise, et le volume celui de ses trente
+barres d'une minute. Chaque fonds est donc découpé en tiers d'effectif égal, sur les deux critères,
+et la dernière colonne éprouve l'écart lui-même :
 
-| Fonds | Critère | bas | moyen | haut | haut moins bas | Student de l'écart |
+| Fonds | Critère, sur la première demi-heure | bas | moyen | haut | haut moins bas | Student de l'écart |
 |---|---|---:|---:|---:|---:|---:|
 | SPY | volatilité | +0,014 | −0,015 | −0,059 | −0,073 | −0,85 |
 | SPY | volume | +0,006 | −0,057 | −0,061 | −0,067 | −1,62 |
@@ -346,6 +348,7 @@ et le compte de barres.
 | La clôture « de la veille » est celle de la séance retenue précédente | mesuré ; 144 des 1 864 lignes du Dow Jones ont une veille à plus de quatre jours, 39 à plus de sept, la pire à cinquante. En n'exigeant que la vraie veille de bourse, sa pente passe de −0,040 (t = −1,39, n = 1 864) à −0,045 (t = −1,35, n = 1 720). Sur le S&P 500 les 15 lignes concernées sont toutes des fins de semaine longues |
 | Le détachement de dividende n'est pas retiré | mesuré ; le rendement de la première demi-heure traverse la nuit, donc la chute de détachement, quatre fois l'an. Sur le S&P 500 il vaut −55,16 points de base ces 41 séances-là contre +4,70 ailleurs, et les retirer déplace la pente de −0,0557 à −0,0569 |
 | Le seuil de complétude est de 390 barres et non de 391 | mesuré ; 1 231 demi-heures sur 259 480 ont perdu une minute en cours de séance et leur prix de fin est celui d'une minute antérieure. La barre de 16 h, elle, est présente sur toutes les séances retenues des huit fonds |
+| Les deux critères de tiers de la section 5.4 portent sur la première demi-heure, non sur la journée | déclaré ; le résumé de l'article dit « jours », et le critère de volatilité est la valeur absolue du régresseur lui-même, ce qui restreint l'étendue de ce régresseur à l'intérieur de chaque tiers |
 | Les bornes de tiers de la section 5.4 sont calculées sur l'échantillon entier | déclaré ; les pentes publiées sont descriptives, mais les colonnes de stratégie de `results/tables/conditionnement.csv` décrivent un opérateur qui aurait connu la distribution de 2026 dès 2016 |
 | Les jours de récession et d'annonce macroéconomique ne sont pas testés | déclaré ; le résumé les cite, et les dater demanderait un calendrier que ce dépôt n'a pas construit |
 | Le coût est modélisé comme une fraction fixe du montant | déclaré ; l'impact de marché d'un ordre de clôture croît avec la taille, ce que ce modèle ignore, donc le seuil publié est un plafond optimiste |

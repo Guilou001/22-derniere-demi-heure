@@ -213,9 +213,9 @@ def matrice_de_predictibilite(table: pd.DataFrame) -> pd.DataFrame:
 def nombre_de_cases_significatives(matrice: pd.DataFrame, seuil: float = 2.0) -> dict:
     """Combien de cases de la matrice passent le seuil, et combien on en attendrait par hasard.
 
-    Soixante-dix-huit cases éprouvées au seuil de deux écarts types en donneraient environ quatre
-    par pur hasard, dans les deux sens confondus. C'est le repère qui empêche de prendre une case
-    isolée pour une découverte.
+    Soixante-dix-huit cases éprouvées au seuil de deux erreurs types en donneraient 3,5 par pur
+    hasard, dans les deux sens confondus. C'est le repère qui empêche de prendre une case isolée
+    pour une découverte.
     """
     n = int(len(matrice))
     return {"cases": n,
@@ -224,6 +224,3 @@ def nombre_de_cases_significatives(matrice: pd.DataFrame, seuil: float = 2.0) ->
             "negatives": int((matrice["student"] < -seuil).sum()),
             "attendues_par_hasard": round(0.0455 * n, 1)}
 
-
-def compter_par_hasard(matrice: pd.DataFrame) -> float:
-    return float(np.mean(matrice["student"].abs() > 2.0))

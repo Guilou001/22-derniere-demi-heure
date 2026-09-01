@@ -51,8 +51,9 @@ def test_les_bornes_de_demi_heure_tombent_aux_bons_rangs():
 
 
 def test_les_treize_rendements_se_composent_en_le_rendement_du_jour():
-    """L'identité qui garde le découpage honnête. Un décalage d'une barre la briserait, alors que
-    la table garderait le bon nombre de lignes et les bonnes colonnes."""
+    """L'arithmétique du découpage, sur une séance fabriquée : le produit des treize rendements
+    redonne le rendement du jour. L'identité est algébrique et ne peut pas échouer, ce que le test
+    plus bas fige ; les deux contrôles qui peuvent échouer sont dans `controle_des_barres`."""
     table = demiheures.rendements(deux_seances(pente=0.01))
     assert len(table) == 1
     assert abs(float(demiheures.ecart_a_l_identite(table).iloc[0])) < 1e-12
