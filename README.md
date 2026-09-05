@@ -1,20 +1,21 @@
-# La première demi-heure ne prédit plus la dernière, et ce n'est pas la nuance qu'on attendait
+# La première demi-heure prédit-elle encore la fin de la séance ?
 
-Un article du Journal of Financial Economics montre qu'entre 1993 et 2013, la première demi-heure,
-mesurée depuis la clôture de la veille, prédisait la dernière. Rejoué sur 2016-2026 et sur huit
-fonds indiciels, **le signe s'inverse sur six d'entre eux**. Le renversement penche du côté que
-l'article disait le plus favorable, les jours volatils et les jours de fort volume. Un seul des huit
-écarts entre tiers dépasse deux erreurs types, là où le hasard en donnerait 0,4.
+Un article publié en 2018 montre que le rendement du début de la journée prédisait celui de la dernière demi-heure entre 1993 et 2013. Si cette relation décrit un comportement durable du marché, elle devrait rester visible après la période étudiée. Le présent projet la mesure donc entre 2016 et 2026 sur huit fonds négociés en bourse.
+
+Un détail de définition est essentiel : le rendement de la première demi-heure commence à la clôture de la veille. Il contient donc la variation de la nuit en plus des trente premières minutes de négociation. Nous séparons ces deux composantes avant d'interpréter le signal.
+
+**Résultat principal.** La pente entre la première et la dernière demi-heure devient négative pour six fonds sur huit, avec une médiane de -0,018. Aucun fonds d'actions ne conserve une pente positive. Une relation plus faible subsiste entre l'avant-dernière et la dernière demi-heure, avec un signe positif pour les huit fonds. Toutefois, elle disparaît entre 0,06 et 0,51 point de base de coût par passage selon le fonds.
+
+Afin d'établir ce résultat, nous présenterons d'abord l'affirmation de l'article et la définition exacte des rendements. Dans un deuxième temps, nous décrirons les huit fonds, les séances et les régressions. Ensuite, nous séparerons la nuit de la première demi-heure et nous comparerons les sous-périodes. Enfin, nous mesurerons les coûts, les faux positifs possibles et les limites de la réplication.
 
 [![ci](https://github.com/Guilou001/22-derniere-demi-heure/actions/workflows/ci.yml/badge.svg)](https://github.com/Guilou001/22-derniere-demi-heure/actions/workflows/ci.yml)
 ![python](https://img.shields.io/badge/python-3.12-blue)
 ![licence](https://img.shields.io/badge/code-MIT-green)
 
-**Résultat.** Sur huit fonds indiciels de 2016 à 2026, et jusqu'à 2 649 séances chacun, la pente de
-la première demi-heure sur la dernière est **négative pour six fonds sur huit**, de médiane −0,018.
-Aucun fonds d'actions ne montre de pente positive. Ce qui subsiste est un effet bien plus modeste,
-l'avant-dernière demi-heure prédisant la dernière, **positif sur les huit**. Il meurt à **0,06 à
-0,51 point de base** de coût par passage selon le fonds.
+Le rapport détaillé est disponible en PDF : [rapport/rapport.pdf](rapport/rapport.pdf).
+
+<details>
+<summary>Résumé en anglais</summary>
 
 *Summary in English. Gao, Han, Li and Zhou (JFE 2018) document market intraday momentum: the first
 half-hour return, measured from the previous close, predicts the last half-hour return on SPY over
@@ -29,6 +30,7 @@ on the four US index funds, and is already losing money at zero cost on EEM. Fin
 half-hour pairs testable on SPY, four exceed a two standard error threshold where chance alone would
 give 3.5.*
 
+</details>
 ## 1. L'affirmation, et le détail qui décide de tout
 
 **Ce que l'article affirme.** Un extrait de son résumé, relevé le 30 août 2026 sur la notice

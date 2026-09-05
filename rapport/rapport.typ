@@ -1,4 +1,4 @@
-#set document(title: "La première demi-heure ne prédit plus la dernière, et ce n'est pas la nuance qu'on attendait", author: "Guillaume Vaudescal")
+#set document(title: "La première demi-heure prédit-elle encore la fin de la séance ?", author: "Guillaume Vaudescal")
 #set page(
   paper: "a4",
   margin: (x: 2.2cm, y: 2.4cm),
@@ -30,18 +30,26 @@
 
 #align(center)[
   #block(width: 100%)[
-    #text(size: 18pt, weight: "bold")[La première demi-heure ne prédit plus la dernière, et ce n'est pas la nuance qu'on attendait]
+    #text(size: 18pt, weight: "bold")[La première demi-heure prédit-elle encore la fin de la séance ?]
     #v(0.6em)
-    #text(size: 10pt, fill: luma(70))[Guillaume Vaudescal · 2026-08-31 · #link("https://github.com/Guilou001/22-derniere-demi-heure")[Guilou001/22-derniere-demi-heure]]
+    #text(size: 10pt, fill: luma(70))[Guillaume Vaudescal · 2026-09-04 · #link("https://github.com/Guilou001/22-derniere-demi-heure")[Guilou001/22-derniere-demi-heure]]
   ]
 ]
 #v(1.2em)
 #line(length: 100%, stroke: 0.6pt + luma(190))
 #v(0.8em)
 
-Un article du Journal of Financial Economics montre qu'entre 1993 et 2013, la première demi-heure, mesurée depuis la clôture de la veille, prédisait la dernière. Rejoué sur 2016-2026 et sur huit fonds indiciels, *le signe s'inverse sur six d'entre eux*. Le renversement penche du côté que l'article disait le plus favorable, les jours volatils et les jours de fort volume. Un seul des huit écarts entre tiers dépasse deux erreurs types, là où le hasard en donnerait 0,4.
+Un article publié en 2018 montre que le rendement du début de la journée prédisait celui de la dernière demi-heure entre 1993 et 2013. Si cette relation décrit un comportement durable du marché, elle devrait rester visible après la période étudiée. Le présent projet la mesure donc entre 2016 et 2026 sur huit fonds négociés en bourse.
 
-*Résultat.* Sur huit fonds indiciels de 2016 à 2026, et jusqu'à 2 649 séances chacun, la pente de la première demi-heure sur la dernière est *négative pour six fonds sur huit*, de médiane −0,018. Aucun fonds d'actions ne montre de pente positive. Ce qui subsiste est un effet bien plus modeste, l'avant-dernière demi-heure prédisant la dernière, *positif sur les huit*. Il meurt à *0,06 à 0,51 point de base* de coût par passage selon le fonds.
+Un détail de définition est essentiel : le rendement de la première demi-heure commence à la clôture de la veille. Il contient donc la variation de la nuit en plus des trente premières minutes de négociation. Nous séparons ces deux composantes avant d'interpréter le signal.
+
+*Résultat principal.* La pente entre la première et la dernière demi-heure devient négative pour six fonds sur huit, avec une médiane de -0,018. Aucun fonds d'actions ne conserve une pente positive. Une relation plus faible subsiste entre l'avant-dernière et la dernière demi-heure, avec un signe positif pour les huit fonds. Toutefois, elle disparaît entre 0,06 et 0,51 point de base de coût par passage selon le fonds.
+
+Afin d'établir ce résultat, nous présenterons d'abord l'affirmation de l'article et la définition exacte des rendements. Dans un deuxième temps, nous décrirons les huit fonds, les séances et les régressions. Ensuite, nous séparerons la nuit de la première demi-heure et nous comparerons les sous-périodes. Enfin, nous mesurerons les coûts, les faux positifs possibles et les limites de la réplication.
+
+Le rapport détaillé est disponible en PDF : #link("rapport/rapport.pdf")[rapport/rapport.pdf].
+
+== Résumé en anglais
 
 _Summary in English. Gao, Han, Li and Zhou (JFE 2018) document market intraday momentum: the first half-hour return, measured from the previous close, predicts the last half-hour return on SPY over 1993-2013. Replayed on 2016-2026 across eight liquid ETFs, with up to 2,649 sessions each, the slope is negative for six of eight, median −0.018, and no equity fund shows a positive slope. The reversal leans the way the paper said its effect was strongest, on high-volatility and high-volume days, on seven of the eight fund-criterion pairs, though only one of the eight high-minus-low differences exceeds two standard errors. Decomposing the signal shows the overnight gap carries all of it, not the first half-hour of trading. A weaker relation does survive, the twelfth half-hour predicting the thirteenth, positive on all eight funds, but it breaks even at 0.06 to 0.51 basis points per trade on the four US index funds, and is already losing money at zero cost on EEM. Finally, of the 78 half-hour pairs testable on SPY, four exceed a two standard error threshold where chance alone would give 3.5._
 
